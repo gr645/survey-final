@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff; /* Background color for the full screen */
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            width: 300px;
+            padding: 1.9rem 1.2rem;
+            text-align: center;
+            background: #222c70;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /*Inputs*/
+        .field {
+            margin-top: .5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5em;
+            background-color: #1f2029;
+            border-radius: 4px;
+            padding: .5em 1em;
+        }
+
+        .input-field {
+            background: none;
+            border: none;
+            outline: none;
+            width: 100%;
+            color: #d3d3d3;
+        }
+
+        /*Text*/
+        .title {
+            margin-bottom: 1rem;
+            font-size: 1.5em;
+            font-weight: 500;
+            color: #f5f5f5;
+        }
+
+        /*Buttons*/
+        .btn {
+            margin: 1rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: .8em;
+            text-transform: uppercase;
+            padding: 0.6em 1.2em;
+            background-color: #ffeba7;
+            color: #5e6681;
+            box-shadow: 0 8px 24px 0 rgb(255 235 167 / 20%);
+            transition: all .3s ease-in-out;
+        }
+        
+        .btn-link {
+            color: #f5f5f5;
+            display: block;
+            font-size: .75em;
+            transition: color .3s ease-out;
+        }
+
+        /*Hover & focus*/
+        .field input:focus::placeholder {
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+        .btn:hover {
+            background-color: #5e6681;
+            color: #ffeba7;
+            box-shadow: 0 8px 24px 0 rgb(16 39 112 / 20%);
+        }
+
+        .btn-link:hover {
+            color: #ffeba7;
+        }
+
+        .alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+}
+
+.alert-error {
+    background-color: #f2dede;
+    color: #a94442;
+    border: 1px solid #ebccd1;
+}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h4 class="title">Log In!</h4>
+        <form id="loginForm" method="POST" action="/login">
+            <div class="field">
+                <input autocomplete="off" id="logemail" placeholder="Email" class="input-field" name="logemail" type="text" required>
+            </div>
+            <div class="field">
+                <input autocomplete="off" id="logpass" placeholder="Password" class="input-field" name="logpass" type="password" required>
+            </div>
+            <button class="btn" type="submit">Login</button>
+        </form>
+        <p style="color: #f5f5f5; margin-top: 1rem;">Don't have an account? 
+            <a href="/signup" class="btn-link">Sign Up</a>
+        </p>
+    </div>
+</body>
+</html>
