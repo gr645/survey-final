@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Survey</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: #222c70;
+            overflow: hidden;
+            color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: flex-end; /* Align Logout button to the right */
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-links li {
+            display: inline;
+        }
+
+        .navbar-links a {
+            color: #ffeba7;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-links a:hover {
+            color: #fff;
+        }
+
+        .panel {
+            width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .field {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-inline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .field-inline .field {
+            flex: 1; /* Ensure both fields take equal space */
+        }
+
+        .field-inline label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .field input[type="text"],
+        .field textarea,
+        .field select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #222c70;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #1a1f5d;
+        }
+
+        .remove-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background-color: #e60000;
+        }
+
+        .add-option-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .add-option-btn:hover {
+            background-color: #45a049;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Add spacing between the input and the button */
+            margin-bottom: 10px; /* Add spacing between options */
+        }
+
+        .optionsContainer {
+            margin-top: 10px;
+        }
+
+        .question {
+            margin-bottom: 20px; /* Add spacing between questions */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .answerField {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <ul class="navbar-links">
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="panel">
+        <h2>Create Survey</h2>
+        <form id="surveyForm" method="POST" action="/submit_survey">
+            <!-- Survey Title and Department Field -->
+            <div class="field-inline">
+                <div class="field">
+                    <label for="surveyTitle">Survey Title</label>
+                    <input type="text" id="surveyTitle" name="surveyTitle" placeholder="Enter survey title" required>
+                </div>
+                <div class="field">
+                    <label for="department">Department</label>
+                    <select id="department" name="department" required>
+                        <option value="" disabled selected>Select your department</option>
+                        <option value="HR">HR</option>
+                        <option value="IT">IT</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Dispatch">Dispatch</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Questions Container -->
+            <div id="questionsContainer">
+                <div class="question">
+                    <div class="field">
+                        <label for="questionType">Question Type</label>
+                        <select class="questionType" name="questionType" required>
+                            <option value="" disabled selected>Select Question Type</option>
+                            <option value="multipleChoice">Multiple Choice </option>
+                            <option value="checkbox">Select Multiple </option>
+                            <option value="openEnded">Open-Ended </option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="questionText">Question</label>
+                        <textarea class="questionText" name="questionText" placeholder="Enter your question here" rows="3" required></textarea>
+                    </div>
+                    <div class="field optionsField" style="display: none;">
+                        <label>Options</label>
+                        <div class="optionsContainer"></div>
+                        <button type="button" class="add-option-btn">Add Option</button>
+                    </div>
+                    <div class="field answerField" style="display: none;">
+                        <label>Answer</label>
+                        <textarea class="answerTextarea" placeholder="Enter your answer here" rows="3" disabled></textarea>
+                    </div>
+                    <button type="button" class="remove-btn">Remove Question</button>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <button type="button" id="addQuestionButton" class="btn">Add Question</button>
+            <button type="submit" class="btn">Create Survey</button>
+        </form>
+    </div>
+
+    <script>
+        const questionsContainer = document.getElementById('questionsContainer');
+        const addQuestionButton = document.getElementById('addQuestionButton');
+
+        // Function to initialize event listeners for a question block
+        function initializeQuestionEvents(question) {
+            const questionType = question.querySelector('.questionType');
+            const optionsField = question.querySelector('.optionsField');
+            const optionsContainer = question.querySelector('.optionsContainer');
+            const addOptionButton = question.querySelector('.add-option-btn');
+            const answerField = question.querySelector('.answerField');
+            const removeButton = question.querySelector('.remove-btn');
+
+            // Show or hide fields based on question type
+            questionType.addEventListener('change', () => {
+                if (questionType.value === 'multipleChoice' || questionType.value === 'checkbox') {
+                    optionsField.style.display = 'block';
+                    answerField.style.display = 'none';
+                } else if (questionType.value === 'openEnded') {
+                    optionsField.style.display = 'none';
+                    answerField.style.display = 'block';
+                } else {
+                    optionsField.style.display = 'none';
+                    answerField.style.display = 'none';
+                }
+            });
+
+            // Add new option
+            addOptionButton.addEventListener('click', () => {
+                const newOption = document.createElement('div');
+                newOption.classList.add('option');
+                newOption.innerHTML = `
+                    <input type="text" name="options[]" placeholder="Enter option" required>
+                    <button type="button" class="remove-btn">Remove Option</button>
+                `;
+                optionsContainer.appendChild(newOption);
+
+                // Add event listener for the remove option button
+                const removeOptionButton = newOption.querySelector('.remove-btn');
+                removeOptionButton.addEventListener('click', () => {
+                    newOption.remove();
+                });
+            });
+
+            // Remove question
+            removeButton.addEventListener('click', () => {
+                question.remove();
+            });
+        }
+
+        // Initialize events for the first question
+        initializeQuestionEvents(document.querySelector('.question'));
+
+        // Add a new question
+        addQuestionButton.addEventListener('click', () => {
+            const newQuestion = document.createElement('div');
+            newQuestion.classList.add('question');
+            newQuestion.innerHTML = `
+                <div class="field">
+                    <label for="questionType">Question Type</label>
+                    <select class="questionType" name="questionType" required>
+                        <option value="" disabled selected>Select Question Type</option>
+                        <option value="multipleChoice">Multiple Choice </option>
+                        <option value="checkbox">Checkbox </option>
+                        <option value="openEnded">Open-Ended </option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="questionText">Question</label>
+                    <textarea class="questionText" name="questionText" placeholder="Enter your question here" rows="3" required></textarea>
+                </div>
+                <div class="field optionsField" style="display: none;">
+                    <label>Options</label>
+                    <div class="optionsContainer"></div>
+                    <button type="button" class="add-option-btn">Add Option</button>
+                </div>
+                <div class="field answerField" style="display: none;">
+                    <label>Answer</label>
+                    <textarea class="answerTextarea" placeholder="Enter your answer here" rows="3" disabled></textarea>
+                </div>
+                <button type="button" class="remove-btn">Remove Question</button>
+            `;
+            questionsContainer.appendChild(newQuestion);
+            initializeQuestionEvents(newQuestion);
+        });
+
+        // Handle form submission
+        const surveyForm = document.getElementById('surveyForm');
+        surveyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const surveyTitle = document.getElementById('surveyTitle').value;
+            const department = document.getElementById('department').value;
+            const questions = [];
+
+            // Loop through all questions and construct the questions array
+            document.querySelectorAll('.question').forEach((question) => {
+                const questionText = question.querySelector('.questionText').value;
+                const questionType = question.querySelector('.questionType').value;
+                const options = Array.from(
+                    question.querySelectorAll('.optionsContainer input[type="text"]')
+                ).map((input) => input.value);
+
+                questions.push({
+                    text: questionText,
+                    type: questionType,
+                    options: options.filter(option => option.trim() !== "") // Remove empty options
+                });
+            });
+
+            // Log the data being sent to the backend
+            console.log({
+                surveyTitle,
+                department,
+                questions,
+            });
+
+            // Send the survey data to the backend
+            const response = await fetch('/submit_survey', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    surveyTitle,
+                    department,
+                    questions,
+                }),
+            });
+
+            if (response.ok) {
+                alert('Survey created successfully!');
+                surveyForm.reset();
+            } else {
+                alert('Failed to create survey.');
+            }
+        });
+
+        const exportResponsesButton = document.getElementById('exportResponsesButton');
+        exportResponsesButton.addEventListener('click', () => {
+            const surveyId = exportResponsesButton.getAttribute('data-survey-id'); // Get the survey ID dynamically
+            if (surveyId) {
+                window.location.href = `/export_responses/${surveyId}`;
+            } else {
+                alert('Survey ID not found. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
